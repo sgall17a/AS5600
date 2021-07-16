@@ -4,8 +4,7 @@ from ustruct import unpack, pack
 from collections import namedtuple
 
 AS5600_id = const(0x36)  #Device ID
-m12 = const((1<<12)-1)  #0xFFF
-
+m12 = const((1<<12)-1)  #0xFFF Mask of most regs is 12 bits
 
 
 REGS=namedtuple('REGS','ZMCO ZPOS MPOS MANG CONF RAWANGLE ANGLE  STATUS AGC MAGNITUDE BURN')
