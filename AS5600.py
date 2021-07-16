@@ -2,7 +2,6 @@ from machine import I2C,Pin
 from micropython import const
 from ustruct import unpack, pack
 from collections import namedtuple
-from time import sleep
 
 AS5600_id = const(0x36)  #Device ID
 m12 = const((1<<12)-1)  #0xFFF
@@ -54,8 +53,6 @@ class RegDescriptor:
     def __get__(self,obj,objtype):
         "Get the register then extract the bit field"
         v = self.get_register(obj)
-        if self.reg == 11:
-            print(self.reg,self.shift,self.mask)
         v >>= self.shift
         v &= self.mask
         return v
@@ -65,11 +62,11 @@ class RegDescriptor:
         if not self.reg in self.writeable:
             raise AttributeError('Register is not writable')
         oldvalue = self.get_register(obj)
-        #oldvalue <<= self.shift # get_register() does a shift, so we have to shift it back
         insertmask = 0xffff - (self.mask << self.shift) #make a mask for a hole
         oldvalue &= insertmask # AND a hole in the old value
+        value >>= self.shift # shift it up to match the mask
         value &= self.mask # mask our new value in case it is too big
-        value <<= self.shift
+        value <<= self.shift #shift it back
         oldvalue |= value  # OR the new value back into the hole
         if self.buffsize == 2:
             buff = pack(">H",oldvalue)
