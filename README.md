@@ -6,11 +6,9 @@ AS5600.py
 
 From the data sheet
 
-"**What is a  AS5600?**
-
 *12-Bit Programmable Contactless Potentiometer**
 
-The AS5600 is an easy to program magnetic rotary position sensor with a high-resolution 12-bit analog or PWM output. This contactless system measures the absolute angle of a diametric magnetized on-axis magnet. 
+The AS5600 is an easy to program magnetic rotary position sensor with a high-resolution 12-bit analog or PWM output. This contactless system measures the absolute angle of a diametric magnetized on-axis magnet. "
 
 This is a Micropython library for reading an AS5600 using I2C.  It was developed on a Seeedstudio board and Raspberry Pi Pico.  It should work with other MCU's running Micropython but I2C setup may differ on on other boards.  It may work on circuit python but I have not tested this.
 
