@@ -24,15 +24,14 @@ class RegDescriptor:
         self.mask = mask
         self.buffsize = buffsize
         self.writeable = (r.ZMCO,r.ZPOS,r.MPOS,r.MANG,r.CONF,r.BURN)
-        self.cache={}
         #NB the I2c object and the device name come from the main class via an object
         
     def get_register(self,obj):
         "Read an I2C register"
         #cache those registers with values that will not change.
         #Dont bother caching bit fields.
-        if self.reg in self.cache:  
-             return self.cache[self.reg]
+        if self.reg in obj.cache:  
+             return obj.cache[self.reg]
             
         #print ('reading now the actual device now')
             
@@ -47,7 +46,7 @@ class RegDescriptor:
             
         #cache writeable values since they are the ones that will not change in useage    
         if self.reg in self.writeable:
-            self.cache[self.reg] = v
+            obj.cache[self.reg] = v
             
         return v
         
@@ -88,6 +87,7 @@ class AS5600:
         self.i2c = i2c
         self.device = device
         self.writeable =(r.ZMCO,r.ZPOS,r.MPOS,r.MANG,r.CONF,r.BURN)
+        self.cache = {} #cache register values
         
     #Use descriptors to read and write a bit field from a register
     #1. we read one or two bytes from i2c
