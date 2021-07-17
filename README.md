@@ -14,9 +14,21 @@ This is a Micropython library for reading an AS5600 using I2C.  It was developed
 
 The field names are taken from the data sheet. All registers in the data sheet are implemented, as simple attributes of the AS5600 class.   You will need to read the datasheet to use the library.
 
+** HOW IT WORKS (Programming)
+NB: YOU WILL STILL HAVE TO READ THE DATASHEET
+
+1. Each register or bitfield named in the datasheet (capitalised) is made into an attribute of the AS5600_low class (see Data descriptor below)
+2. A higher level class AS5600 inherits from AS5600_low.  This allows friendlier names etc, without polluting the basics.  (Note: I dont think you can make friendler attribute names at this level unless you make a new descriptor).
+3. You have to call super() in __init__ in the higher level class
+4. Micropython does not seem to have __attribute__ etc so I use Data descriptors which a probably better and simpler anyway.  The actual I2C calls are done in the data descriptor class.
+5. Configuration attributes are writeable and/or burnable but do not change in normal useage.  Therefore they are cached, on first read.  The cache is updated if the register is written to.  The CONFIG register in particular has lots of little bit fields so you do not want to have to read over I2C for every little bitfield.
+
+HOW IT WORKS (HARDWARE).
+
+Still testing.
 
 
-Example file
+*** Example file.
 
 This is an early work in progress.  I ran a small  endless loop program then waved a magnet around.  I seemed to get sensible values from RAWANGLE but obviously a mechanical better setup is required.
 
