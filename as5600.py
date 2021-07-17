@@ -97,6 +97,8 @@ class AS5600:
     ZPOS=      RegDescriptor(r.ZPOS,0,m12) #zero position
     MPOS=      RegDescriptor(r.MPOS,0,m12) #maximum position
     MANG=      RegDescriptor(r.MANG,0,m12) #maximum angle (alternative to above)
+    #Dummy example how how to make friendlier duplicate names if you want to
+    #max_angle = RegDescriptor(r.MANG,0,m12) #maximum angle (alternative to above)
     CONF=      RegDescriptor(r.CONF,0,(1<<14)-1) # this register has 14 bits (see below)
     RAWANGLE=  RegDescriptor(r.RAWANGLE,0,m12) 
     ANGLE   =  RegDescriptor(r.ANGLE,0,m12) #angle with various adjustments (see datasheet)
