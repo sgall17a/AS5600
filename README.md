@@ -12,9 +12,9 @@ From the data sheet https://ams.com/documents/20143/36005/AS5600_DS000365_5-00.p
 
 `The AS5600 is an easy to program magnetic rotary position sensor with a high-resolution 12-bit analog or PWM output. This contactless system measures the absolute angle of a diametric magnetized on-axis magnet. "`
 
-`This is a Micropython library for reading an AS5600 using I2C.  It was developed on a Seeedstudio board and Raspberry Pi Pico.  It should work with other MCU's running Micropython but I2C setup may differ on on other boards.  It may work on circuit python but I have not tested this.`
+This is a Micropython library for reading an AS5600 using I2C.  It was developed on a Seeedstudio board and Raspberry Pi Pico.  It should work with other MCU's running Micropython but I2C setup may differ on on other boards.  It may work on circuit python but I have not tested this.
 
-`The field names are taken from the data sheet. All registers in the data sheet are implemented, as simple attributes of the AS5600 class.   You will need to read the datasheet to use the library`.
+The field names are taken from the data sheet. All registers in the data sheet are implemented, as simple attributes of the AS5600 class.   You will need to read the datasheet to use the library.
 
 ### HOW IT WORKS (Programming)
 
