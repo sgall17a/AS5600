@@ -94,30 +94,30 @@ class AS5600:
     #2. We shift the value so that the least significant bit is bit zero
     #3. We mask off the bits required  (most values are 12 bits hence m12)
     ZMCO=      RegDescriptor(r.ZMCO,shift=0,mask=3,buffsize=1) #1 bit
-    ZPOS=      RegDescriptor(r.ZPOS,0,m12)
-    MPOS=      RegDescriptor(r.MPOS,0,m12)
-    MANG=      RegDescriptor(r.MANG,0,m12)
-    CONF=      RegDescriptor(r.CONF,0,(1<<14)-1) # this register has 14 bits
-    RAWANGLE=  RegDescriptor(r.RAWANGLE,0,m12)
-    ANGLE   =  RegDescriptor(r.ANGLE,0,m12)
-    STATUS=    RegDescriptor(r.STATUS,0,m12)
-    AGC=       RegDescriptor(r.AGC,0,0xF,1)
-    MAGNITUDE= RegDescriptor(r.MAGNITUDE,0,m12)
+    ZPOS=      RegDescriptor(r.ZPOS,0,m12) #zero position
+    MPOS=      RegDescriptor(r.MPOS,0,m12) #maximum position
+    MANG=      RegDescriptor(r.MANG,0,m12) #maximum angle (alternative to above)
+    CONF=      RegDescriptor(r.CONF,0,(1<<14)-1) # this register has 14 bits (see below)
+    RAWANGLE=  RegDescriptor(r.RAWANGLE,0,m12) 
+    ANGLE   =  RegDescriptor(r.ANGLE,0,m12) #angle with various adjustments (see datasheet)
+    STATUS=    RegDescriptor(r.STATUS,0,m12) #basically strength of magnet
+    AGC=       RegDescriptor(r.AGC,0,0xF,1) #automatic gain control
+    MAGNITUDE= RegDescriptor(r.MAGNITUDE,0,m12) #? something to do with the CORDIC for atan RTFM
     BURN=      RegDescriptor(r.BURN,0,0xF,1)
 
     #Configuration bit fields
-    PM =      RegDescriptor(r.CONF,0,0x3) #2bits
-    HYST =    RegDescriptor(r.CONF,2,0x3)
-    OUTS =    RegDescriptor(r.CONF,4,0x3)
-    PWMF =    RegDescriptor(r.CONF,6,0x3)
-    SF =      RegDescriptor(r.CONF,8,0x3)
-    FTH =     RegDescriptor(r.CONF,10,0x7) #3 bits
-    WD =      RegDescriptor(r.CONF,13,0x1) #1 bit
+    PM =      RegDescriptor(r.CONF,0,0x3) #2bits Power mode
+    HYST =    RegDescriptor(r.CONF,2,0x3) # hysteresis for smoothing out zero crossing
+    OUTS =    RegDescriptor(r.CONF,4,0x3) # HARDWARE output stage ie analog (low,high)  or PWM
+    PWMF =    RegDescriptor(r.CONF,6,0x3) #pwm frequency
+    SF =      RegDescriptor(r.CONF,8,0x3) #slow filter (?filters glitches harder) RTFM
+    FTH =     RegDescriptor(r.CONF,10,0x7) #3 bits fast filter threshold. RTFM
+    WD =      RegDescriptor(r.CONF,13,0x1) #1 bit watch dog - Kicks into low power mode if nothing changes
     
-    #status bit fields
+    #status bit fields. ?having problems getting these to make sense
     MH =      RegDescriptor(r.STATUS,3,0x1) #2bits  Magnet too strong (high)
     ML =      RegDescriptor(r.STATUS,4,0x1) #2bits  Magnet too weak (low)
-    MD =      RegDescriptor(r.STATUS,5,0x1) #2bits  Magnet just right
+    MD =      RegDescriptor(r.STATUS,5,0x1) #2bits  Magnet detected
     
     def scan(self):
         "Debug utility function to check your i2c bus"
