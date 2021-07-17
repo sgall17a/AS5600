@@ -78,6 +78,9 @@ class RegDescriptor:
             
         obj.i2c.writeto_mem(obj.device,self.reg,buff) # write result back to the AS5600
         
+        #must write the new value into the cache
+        self.cache[self.reg] = oldvalue
+        
   
 
 class AS5600:
