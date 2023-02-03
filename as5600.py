@@ -10,7 +10,7 @@ m12 = const((1<<12)-1)  #0xFFF
 
 
 REGS=namedtuple('REGS','ZMCO ZPOS MPOS MANG CONF RAWANGLE ANGLE  STATUS AGC MAGNITUDE BURN')
-r = REGS(0,1,3,5,7,0xc,0xe,0x0b,0x1a,0xb,0xff)
+r = REGS(0,1,3,5,7,0xc,0xe,0xb,0x1a,0x1b,0xff)
     
 #You cant overwrite __attribute__ in micropython but you can use Descriptors
 class RegDescriptor:
@@ -93,7 +93,7 @@ class AS5600:
     #1. we read one or two bytes from i2c
     #2. We shift the value so that the least significant bit is bit zero
     #3. We mask off the bits required  (most values are 12 bits hence m12)
-    ZMCO=      RegDescriptor(r.ZMCO,shift=0,mask=3,buffsize=1) #1 bit
+    ZMCO=      RegDescriptor(r.ZMCO,shift=0,mask=3,buffsize=1) #2 bit
     ZPOS=      RegDescriptor(r.ZPOS,0,m12) #zero position
     MPOS=      RegDescriptor(r.MPOS,0,m12) #maximum position
     MANG=      RegDescriptor(r.MANG,0,m12) #maximum angle (alternative to above)
@@ -117,9 +117,9 @@ class AS5600:
     WD =      RegDescriptor(r.CONF,13,0x1) #1 bit watch dog - Kicks into low power mode if nothing changes
     
     #status bit fields. ?having problems getting these to make sense
-    MH =      RegDescriptor(r.STATUS,3,0x1) #2bits  Magnet too strong (high)
-    ML =      RegDescriptor(r.STATUS,4,0x1) #2bits  Magnet too weak (low)
-    MD =      RegDescriptor(r.STATUS,5,0x1) #2bits  Magnet detected
+    MH =      RegDescriptor(r.STATUS,3,0x1,1) #2bits  Magnet too strong (high)
+    ML =      RegDescriptor(r.STATUS,4,0x1,1) #2bits  Magnet too weak (low)
+    MD =      RegDescriptor(r.STATUS,5,0x1,1) #2bits  Magnet detected
     
     def scan(self):
         "Debug utility function to check your i2c bus"
