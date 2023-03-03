@@ -1,4 +1,4 @@
-****Micropython library for AS5600
+**** Micropython library for AS5600
 
 The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by the Hall effect.  The resolution is 12 bits thus it can divide a complete rotation into 2^12 or 4096 parts. The device is configured and read by I2C.  This library can read all registers on the AS5600 and can write to the writable registers.  (This is a complete rewrite of the library which uses only common micropython features and avoids things like Descriptors used in previous version)
 
