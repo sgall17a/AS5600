@@ -132,18 +132,32 @@ def wd(self,*args)
     1 = ON         
 
 ```
-## Status (Read only)
+## Status (Read only )
 
 ```python
-print('Magnet detected',z.md())
-print('Magnet too week',z.ml())
-print('Magnet too strong ',z.mh())
-print("Automatic Gain control (0-255)",z.agc())
 
-#Actual angles read only
-print("Rawangle",z.rawangle())
-#Angle has filters and ranges applied
-print("Angle",z.angle())
+z.md(self)
+    #Magnet detected
+
+z.ml(self)
+    #Magnet too weak
+    
+z.mh(self)   
+    # Magnet too strong
+    
+z.agc(self)
+    #Automatic Gain control (0-255)
+    
+```
+
+## Actual angles read only
+
+``` python
+z.rawangle(self)
+    #Raw angle
+    
+z.angle(self)
+    #Angle - same as rawangle() but filters and hysteresis applied
 ```
 
 
