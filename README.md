@@ -6,9 +6,10 @@ The device is  cofigured and read through I2C but can also be used in a standalo
 which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
 
 ## Overview.
-Note:  Relevant register names in brackets.  
-The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
-This is a brief overview and the datasheet will need to be consulted for forfurther information).
+Notes:  
+    1. Relevant register names in brackets.  
+    2. The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
+    3. This is a brief overview and the datasheet will need to be consulted for forfurther information).
 
 ***Configuration registers (READ/WRITE)   
 1.  Setting a minimum and maximum angle. (ZPOS,MPOS,MANG)
@@ -109,7 +110,7 @@ def sf(self,*args )
      11 = 2x
 
 def fth(self,*args)
-    Fast filter to reduce jitter or noise
+    """Fast filter to reduce jitter or noise
     000 = slow filter only, 
     001 = 6 LSBs, 
     010 = 7 LSBs,
@@ -117,7 +118,7 @@ def fth(self,*args)
     100 = 18 LSBs, 
     101 = 21 LSBs, 
     110 = 24 LSBs, 
-    111 = 10 LSBs
+    111 = 10 LSBs"""
 
 def wd(self,*args)
     Watchdog.  Drop into LPM3 after about 1 minute of inactivity
@@ -140,7 +141,7 @@ print("Angle",z.angle())
 ```
 
 
-## Comments.
+# Comments.
 
 The library was tested and developed on a Raspberry Pi Pico with Micropython 19.1.1.
 
