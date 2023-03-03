@@ -27,7 +27,7 @@ Notes:
 ### Reading sensor values (Read only)
 Output can be analog, PWM or the register values ANGLE and RAWANGLE.
 
-### Burning configuration.e
+### Burning configuration.
 Configuration can be permanently burnt into the device.  This enables it to operate in a standalone fashion.
 This is down by writing to a burn register. (BURN).
 Maximum and minimal angles can only be burnt three times and the burn count is stored in ZMCO.  (See datasheet!)  
@@ -81,39 +81,39 @@ def mang(self,*args)
 
 ``` python
 def pm(self,*args)
-    Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
+    """Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
     00 = NOM, 
     01 = LPM1 
     10 = LPM2 
-    11 = LPM3
+    11 = LPM3"""
     
 def hyst(sel,*args)
-    Hysteresis.  Set 4 hysteresis modes to reduce output jitter
+    """Hysteresis.  Set 4 hysteresis modes to reduce output jitter
     00 = OFF,
     01 = 1 LSB, 
     10 = 2 LSBs, 
-    11 = 3 LSBs
+    11 = 3 LSBs"""
     
 def z.outs(self,*args)
-    Output stage PWM or analog
+    """Output stage PWM or analog
     00 = analog (full range from 0% to 100% between GND and VDD,
     01 = analog (reduced range from 10% to 90% between GND and VDD, 
-    10 = digital PWM
+    10 = digital PWM"""
 
 def pwmf(self,*args)
 
-    PWM frequency   
+    """PWM frequency   
     00 = 115 Hz; 
     01 = 230 Hz; 
     10 = 460 Hz; 
-    11 = 920 Hz
+    11 = 920 Hz"""
 
 def sf(self,*args )
-    Slow filter to reduce jitter or noise.
+    """Slow filter to reduce jitter or noise.
      00 = 16x (1); 
      01 = 8x; 
      10 = 4x; 
-     11 = 2x
+     11 = 2x"""
 
 def fth(self,*args)
     """Fast filter to reduce jitter or noise
@@ -127,25 +127,25 @@ def fth(self,*args)
     111 = 10 LSBs"""
 
 def wd(self,*args)
-    Watchdog.  Drop into LPM3 after about 1 minute of inactivity
+   """ Watchdog.  Drop into LPM3 after about 1 minute of inactivity
     0 = OFF, 
-    1 = ON         
+    1 = ON   """      
 
 ```
 ## Status (Read only )
 
 ```python
 
-z.md(self)
+def md(self)
     #Magnet detected
 
-z.ml(self)
+def ml(self)
     #Magnet too weak
     
-z.mh(self)   
+def mh(self)   
     # Magnet too strong
     
-z.agc(self)
+def agc(self)
     #Automatic Gain control (0-255)
     
 ```
@@ -153,10 +153,10 @@ z.agc(self)
 ## Actual angles read only
 
 ``` python
-z.rawangle(self)
+def rawangle(self)
     #Raw angle
     
-z.angle(self)
+def angle(self)
     #Angle - same as rawangle() but filters and hysteresis applied
 ```
 
