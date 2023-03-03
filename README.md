@@ -49,8 +49,8 @@ If you try to write to a non-writeable register an error will be thrown
 
 #### For example.
 
-<code>
-    from as5600 import AS5600
+
+``` from as5600 import AS5600
 z = AS5600(i2c)
 #Read the ZPOS register:  
 value = z.zpos(). #This will return the register value
@@ -123,7 +123,7 @@ def wd(self,*args)
     0 = OFF, 
     1 = ON         
 
-</code>
+```
 
 #Status (Read only)
 print('Magnet detected',z.md())
