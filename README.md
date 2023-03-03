@@ -5,12 +5,12 @@ The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by t
 The device is  cofigured and read through I2C but can also be used in a standalone mode in 
 which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
 
-## Overviw.
+## Overview.
 Relevant register names in brackets.  
 The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
 This is a brief overview and the datasheet will need to be consulted for forfurther information).
 
-Things that can be configured (READ/WRITE) are:  
+****Things that can be configured (READ/WRITE) are:  
 1.  Setting a minimum and maximum angle. (ZPOS,MPOS,MANG)
 2.  Setting an output type, either an analog voltage or duty cycle on a PWM output.  This is mainly for a standalone mode in which the device can be used without a microprocessor. (OUTS)
 4.  Set PWM frequency. (PWMF)
@@ -31,7 +31,7 @@ Configuration can be permanently burnt into the device.  This enables it to oper
 This is down by writing to a burn register. (BURN).
 Maximum and minimal angles can only be burnt three times and the burn count is stored in ZMCO.  (See datasheet!)  
 
-Library
+## Library
 The library provides a class AS5600 in a file called ‘as5600.py’ and is initialised by passing in an I2C object from machine library.   
 
 # Class A5600
@@ -39,7 +39,7 @@ The library provides a class AS5600 in a file called ‘as5600.py’ and is init
 This class is instantiated with an I2C object from the micropython machine library.
 An optional device id can be supplied (default 0x36),  say if you had multiple devices and were using a I2C bus multiplexer 
 
-General notes
+# General notes
 
 Each register is assigned a method with the same name as  the datasheet  except that it is in lower case rather upper case.
 If the method is called with no parameter it returns the value of the register
@@ -47,8 +47,10 @@ If the method is called with a parameter then the register is set to the value o
 If you try to write to a non-writeable register an error will be thrown
 
 
-For example.
-from as5600 import AS5600
+#### For example.
+
+<code>
+    from as5600 import AS5600
 z = AS5600(i2c)
 #Read the ZPOS register:  
 value = z.zpos(). #This will return the register value
@@ -121,7 +123,7 @@ def wd(self,*args)
     0 = OFF, 
     1 = ON         
 
-
+</code>
 
 #Status (Read only)
 print('Magnet detected',z.md())
@@ -134,7 +136,7 @@ print("Rawangle",z.rawangle())
 #Angle has filters and ranges applied
 print("Angle",z.angle())
 
-Comments.
+## Comments.
 
 The library was tested and developed on a Raspberry Pi Pico with Micropython 19.1.1.
 Standard micropython is used and this should run on other boards and micropython versions.
