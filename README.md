@@ -1,11 +1,11 @@
-**** Micropython library for AS5600
+# Micropython library for AS5600
 
 The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by the Hall effect.  The resolution is 12 bits thus it can divide a complete rotation into 2^12 or 4096 parts. The device is configured and read by I2C.  This library can read all registers on the AS5600 and can write to the writable registers.  (This is a complete rewrite of the library which uses only common micropython features and avoids things like Descriptors used in previous version)
 
 The device is  cofigured and read through I2C but can also be used in a standalone mode in 
 which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
 
-Overviw.
+## Overviw.
 Relevant register names in brackets.  
 The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
 This is a brief overview and the datasheet will need to be consulted for forfurther information).
@@ -23,10 +23,10 @@ There are some status registers (Read only):
 1.  Magnet strength (MD,ML,MH)
 2.  Automatic gain control (adusted automatically bring readings to useable levels) (AGC)
 
-Reading sensor values.
+## Reading sensor values.
 Output can be analog, PWM or register value.  (ANGLE, RAWANGLE).
 
-Burning configuration.
+## Burning configuration.
 Configuration can be permanently burnt into the device.  This enables it to operate in a standalone fashion.
 This is down by writing to a burn register. (BURN).
 Maximum and minimal angles can only be burnt three times and the burn count is stored in ZMCO.  (See datasheet!)  
@@ -34,7 +34,7 @@ Maximum and minimal angles can only be burnt three times and the burn count is s
 Library
 The library provides a class AS5600 in a file called ‘as5600.py’ and is initialised by passing in an I2C object from machine library.   
 
-Class A5600
+# Class A5600
 
 This class is instantiated with an I2C object from the micropython machine library.
 An optional device id can be supplied (default 0x36),  say if you had multiple devices and were using a I2C bus multiplexer 
@@ -90,7 +90,8 @@ def z.outs(self,*args)
     01 = analog (reduced range from 10% to 90% between GND and VDD, 
     10 = digital PWM
 
-def pwmf(self)
+'''' def pwmf(self)''''
+
     PWM frequency   
     00 = 115 Hz; 
     01 = 230 Hz; 
