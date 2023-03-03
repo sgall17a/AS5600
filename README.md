@@ -1,76 +1,144 @@
-# AS5600
-AS560 Micropython library for reading this magnetic sensor
+****Micropython library for AS5600
+
+The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by the Hall effect.  The resolution is 12 bits thus it can divide a complete rotation into 2^12 or 4096 parts. The device is configured and read by I2C.  This library can read all registers on the AS5600 and can write to the writable registers.  (This is a complete rewrite of the library which uses only common micropython features and avoids things like Descriptors used in previous version)
+
+The device is  cofigured and read through I2C but can also be used in a standalone mode in 
+which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
+
+Overviw.
+Relevant register names in brackets.  
+The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
+This is a brief overview and the datasheet will need to be consulted for forfurther information).
+
+Things that can be configured (READ/WRITE) are:  
+1.  Setting a minimum and maximum angle. (ZPOS,MPOS,MANG)
+2.  Setting an output type, either an analog voltage or duty cycle on a PWM output.  This is mainly for a standalone mode in which the device can be used without a microprocessor. (OUTS)
+4.  Set PWM frequency. (PWMF)
+3.  Set direction (either clockwise or anti-clockwise). (Pin)
+4.  Set power mode to use less current and a watchdog setting.( PM, WD)
+5.  Filtering output to reduce jitter, either fast or slow (SF,FTH)
+6.  Setting some hysteresis in order to stabilise sensors outputs. (HYST)
+
+There are some status registers (Read only):
+1.  Magnet strength (MD,ML,MH)
+2.  Automatic gain control (adusted automatically bring readings to useable levels) (AGC)
+
+Reading sensor values.
+Output can be analog, PWM or register value.  (ANGLE, RAWANGLE).
+
+Burning configuration.
+Configuration can be permanently burnt into the device.  This enables it to operate in a standalone fashion.
+This is down by writing to a burn register. (BURN).
+Maximum and minimal angles can only be burnt three times and the burn count is stored in ZMCO.  (See datasheet!)  
+
+Library
+The library provides a class AS5600 in a file called ‘as5600.py’ and is initialised by passing in an I2C object from machine library.   
+
+Class A5600
+
+This class is instantiated with an I2C object from the micropython machine library.
+An optional device id can be supplied (default 0x36),  say if you had multiple devices and were using a I2C bus multiplexer 
+
+General notes
+
+Each register is assigned a method with the same name as  the datasheet  except that it is in lower case rather upper case.
+If the method is called with no parameter it returns the value of the register
+If the method is called with a parameter then the register is set to the value of the parameter and the passed parameter is returned.
+If you try to write to a non-writeable register an error will be thrown
 
 
-AS5600.py
+For example.
+from as5600 import AS5600
+z = AS5600(i2c)
+#Read the ZPOS register:  
+value = z.zpos(). #This will return the register value
+#Write to the ZPOS register  
+k = z.pos(value).  #This will return the value supplied, after writing it to the register
 
-**What is an  AS5600?**
+All register methods
 
-From the data sheet https://ams.com/documents/20143/36005/AS5600_DS000365_5-00.pdf
+Angles.
 
-### `12-Bit Programmable Contactless Potentiometer`
-
-`The AS5600 is an easy to program magnetic rotary position sensor with a high-resolution 12-bit analog or PWM output. This contactless system measures the absolute angle of a diametric magnetized on-axis magnet. "`
-
-This is a Micropython library for reading an AS5600 using I2C.  It was developed on a Seeedstudio board and Raspberry Pi Pico.  It should work with other MCU's running Micropython but I2C setup may differ on on other boards.  It may work on circuit python but I have not tested this.
-
-The field names are taken from the data sheet. All registers in the data sheet are implemented, as simple attributes of the AS5600 class.   You will need to read the datasheet to use the library.
-
-### HOW IT WORKS (Programming)
-
-**NB: YOU WILL STILL HAVE TO READ THE DATASHEET**
-
-1. Each register or bitfield named in the datasheet (capitalised) is made into an attribute of the AS5600_low class (see Data descriptor below)
-2. A higher level class AS5600 inherits from AS5600_low.  This allows friendlier names etc, without polluting the basics.  (Note: I dont think you can make friendler attribute names at this level unless you make a new descriptor).
-3. You have to call super() in __init__ in the higher level class
-4. Micropython does not seem to have __attribute__ etc so I use Data descriptors which a probably better and simpler anyway.  The actual I2C calls are done in the data descriptor class.
-5. Configuration attributes are writeable and/or burnable but do not change in normal useage.  Therefore they are cached, on first read.  The cache is updated if the register is written to.  The CONFIG register in particular has lots of little bit fields so you do not want to have to read over I2C for every little bitfield.
-
-From the code:
-
-```
-   #Use descriptors to read and write a bit field from a register
-    #1. we read one or two bytes from i2c
-    #2. We shift the value so that the least significant bit is bit zero
-    #3. We mask off the bits required  (most values are 12 bits hence m12)
-    ZMCO=      RegDescriptor(r.ZMCO,shift=0,mask=3,buffsize=1) #1 bit
-    ZPOS=      RegDescriptor(r.ZPOS,0,m12) #zero position
-    MPOS=      RegDescriptor(r.MPOS,0,m12) #maximum position
-    MANG=      RegDescriptor(r.MANG,0,m12) #maximum angle (alternative to above)
-    CONF=      RegDescriptor(r.CONF,0,(1<<14)-1) # this register has 14 bits (see below)
-    RAWANGLE=  RegDescriptor(r.RAWANGLE,0,m12) 
-    ANGLE   =  RegDescriptor(r.ANGLE,0,m12) #angle with various adjustments (see datasheet)
-    STATUS=    RegDescriptor(r.STATUS,0,m12) #basically strength of magnet
-    AGC=       RegDescriptor(r.AGC,0,0xF,1) #automatic gain control
-    MAGNITUDE= RegDescriptor(r.MAGNITUDE,0,m12) #? something to do with the CORDIC for atan RTFM
-    BURN=      RegDescriptor(r.BURN,0,0xF,1)
-
-    #Configuration bit fields
-    PM =      RegDescriptor(r.CONF,0,0x3) #2bits Power mode
-    HYST =    RegDescriptor(r.CONF,2,0x3) # hysteresis for smoothing out zero crossing
-    OUTS =    RegDescriptor(r.CONF,4,0x3) # HARDWARE output stage ie analog (low,high)  or PWM
-    PWMF =    RegDescriptor(r.CONF,6,0x3) #pwm frequency
-    SF =      RegDescriptor(r.CONF,8,0x3) #slow filter (?filters glitches harder) RTFM
-    FTH =     RegDescriptor(r.CONF,10,0x7) #3 bits fast filter threshold. RTFM
-    WD =      RegDescriptor(r.CONF,13,0x1) #1 bit watch dog - Kicks into low power mode if nothing changes
+def zpos(self)
+    Zero value, to set that the minimum readout  value
     
-    #status bit fields. ?having problems getting these to make sense
-    MH =      RegDescriptor(r.STATUS,3,0x1) #2bits  Magnet too strong (high)
-    ML =      RegDescriptor(r.STATUS,4,0x1) #2bits  Magnet too weak (low)
-    MD =      RegDescriptor(r.STATUS,5,0x1) #2bits  Magnet detected
+def mpos(self,*args)
+    Maximum position in devices units or 360/4096.  Setting this clear the maximum angle
+
+def mang(self,*args)
+    Set the maximum position in degrees.  Setting this clears the mpos value
+
+#Configuration (Read / Write)
+
+def pm(self,*args)
+    Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
+    00 = NOM, 
+    01 = LPM1, 
+    10 = LPM2, 
+    11 = LPM3
     
-```
+def hyst(sel,*args)
+    Hysteresis.  Set 4 hysteresis modes to reduce output jitter
+    00 = OFF,
+    01 = 1 LSB, 
+    10 = 2 LSBs, 
+    11 = 3 LSBs
+    
+def z.outs(self,*args)
+    Output stage PWM or analog
+    00 = analog (full range from 0% to 100% between GND and VDD,
+    01 = analog (reduced range from 10% to 90% between GND and VDD, 
+    10 = digital PWM
+
+def pwmf(self)
+    PWM frequency   
+    00 = 115 Hz; 
+    01 = 230 Hz; 
+    10 = 460 Hz; 
+    11 = 920 Hz
+
+def sf(self,*args )
+    Slow filter to reduce jitter or noise.
+     00 = 16x (1); 
+     01 = 8x; 
+     10 = 4x; 
+     11 = 2x
+
+def fth(self,*args)
+    Fast filter to reduce jitter or noise
+    000 = slow filter only, 
+    001 = 6 LSBs, 
+    010 = 7 LSBs,
+    011 = 9 LSBs,
+    100 = 18 LSBs, 
+    101 = 21 LSBs, 
+    110 = 24 LSBs, 
+    111 = 10 LSBs
+
+def wd(self,*args)
+    Watchdog.  Drop into LPM3 after about 1 minute of inactivity
+    0 = OFF, 
+    1 = ON         
 
 
 
-#### HOW IT WORKS (HARDWARE).
+#Status (Read only)
+print('Magnet detected',z.md())
+print('Magnet too week',z.ml())
+print('Magnet too strong ',z.mh())
+print("Automatic Gain control (0-255)",z.agc())
 
-*Still testing.*
+#Actual angles read only
+print("Rawangle",z.rawangle())
+#Angle has filters and ranges applied
+print("Angle",z.angle())
 
-#### Example file.
+Comments.
 
-This is an early work in progress.  I ran a small  endless loop program then waved a magnet around.  I seemed to get sensible values from RAWANGLE but obviously a mechanical better setup is required.
+The library was tested and developed on a Raspberry Pi Pico with Micropython 19.1.1.
+Standard micropython is used and this should run on other boards and micropython versions.
+I have had trouble using hardware I2C on the Pi Pico but SoftI2C was fine.
+Not tested on Circuitypython but I would expect that some fixes and changes may be required. 
 
-The MD field never seemed to say a magnet was not detected although reasonable values were being generated by RAW ANGLE.  I am not sure why this is so, at this stage.  So some debugging will be required.  
 
-AGC levels seem very low.
+
