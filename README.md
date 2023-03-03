@@ -28,7 +28,7 @@ Notes:
 Output can be analog, PWM or the register values ANGLE and RAWANGLE.
 
 ### Burning configuration.
-Configuration can be permanently burnt into the device.  This enables it to operate in a standalone fashion.
+Configuration can be permanently burnt into the device to enable it to operate in a standalone fashion.
 This is down by writing to a burn register. (BURN).
 Maximum and minimal angles can only be burnt three times and the burn count is stored in ZMCO.  (See datasheet!)  
 
@@ -43,8 +43,11 @@ An optional device id can be supplied (default 0x36),  say if you had multiple d
 ### General notes
 
 Each register is assigned a method with the same name as  the datasheet  except that it is in lower case rather upper case.
+
 If the method is called with no parameter it returns the value of the register
+
 If the method is called with a parameter then the register is set to the value of the parameter and the passed parameter is returned.
+
 If you try to write to a non-writeable register an error will be thrown
 
 
