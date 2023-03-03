@@ -58,9 +58,9 @@ value = z.zpos(). #This will return the register value
 #Write to the ZPOS register  
 k = z.pos(value).  #This will return the value supplied, after writing it to the register
 
-All register methods
+#All register methods
 
-Angles.
+#Angles.
 
 def zpos(self)
     Zero value, to set that the minimum readout  value
@@ -74,12 +74,11 @@ def mang(self,*args)
 #Configuration (Read / Write)
 
 def pm(self,*args)
-    #/Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
+    Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
     00 = NOM, 
-    01 = LPM1, 
-    10 = LPM2, 
+    01 = LPM1 
+    10 = LPM2 
     11 = LPM3
-    /#
     
 def hyst(sel,*args)
     Hysteresis.  Set 4 hysteresis modes to reduce output jitter
@@ -127,6 +126,7 @@ def wd(self,*args)
 
 ```
 
+```python
 #Status (Read only)
 print('Magnet detected',z.md())
 print('Magnet too week',z.ml())
@@ -137,6 +137,8 @@ print("Automatic Gain control (0-255)",z.agc())
 print("Rawangle",z.rawangle())
 #Angle has filters and ranges applied
 print("Angle",z.angle())
+```
+
 
 ## Comments.
 
