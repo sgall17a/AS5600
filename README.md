@@ -74,11 +74,12 @@ def mang(self,*args)
 #Configuration (Read / Write)
 
 def pm(self,*args)
-    Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
+    #/Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
     00 = NOM, 
     01 = LPM1, 
     10 = LPM2, 
     11 = LPM3
+    /#
     
 def hyst(sel,*args)
     Hysteresis.  Set 4 hysteresis modes to reduce output jitter
