@@ -19,7 +19,7 @@ This is a brief overview and the datasheet will need to be consulted for forfurt
 5.  Filtering output to reduce jitter, either fast or slow (SF,FTH)
 6.  Setting some hysteresis in order to stabilise sensors outputs. (HYST)
 
-***Status registers (Read only):
+*** Status registers (Read only):
 1.  Magnet strength (MD,ML,MH)
 2.  Automatic gain control (adusted automatically bring readings to useable levels) (AGC)
 
@@ -143,8 +143,11 @@ print("Angle",z.angle())
 ## Comments.
 
 The library was tested and developed on a Raspberry Pi Pico with Micropython 19.1.1.
+
 Standard micropython is used and this should run on other boards and micropython versions.
+
 I have had trouble using hardware I2C on the Pi Pico but SoftI2C was fine.
+
 Not tested on Circuitypython but I would expect that some fixes and changes may be required. 
 
 
