@@ -58,9 +58,11 @@ z = AS5600(i2c)
 value = z.zpos(). #This will return the register value
 #Write to the ZPOS register  
 k = z.pos(value).  #This will return the value supplied, after writing it to the register
+```
 
-#All register methods
+# All register methods
 
+``` python 
 #Angles.
 
 def zpos(self)
