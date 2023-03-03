@@ -6,11 +6,11 @@ The device is  cofigured and read through I2C but can also be used in a standalo
 which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
 
 ## Overview.
-Relevant register names in brackets.  
+Note:  Relevant register names in brackets.  
 The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
 This is a brief overview and the datasheet will need to be consulted for forfurther information).
 
-****Things that can be configured (READ/WRITE) are:  
+***Configuration registers (READ/WRITE)   
 1.  Setting a minimum and maximum angle. (ZPOS,MPOS,MANG)
 2.  Setting an output type, either an analog voltage or duty cycle on a PWM output.  This is mainly for a standalone mode in which the device can be used without a microprocessor. (OUTS)
 4.  Set PWM frequency. (PWMF)
@@ -19,7 +19,7 @@ This is a brief overview and the datasheet will need to be consulted for forfurt
 5.  Filtering output to reduce jitter, either fast or slow (SF,FTH)
 6.  Setting some hysteresis in order to stabilise sensors outputs. (HYST)
 
-There are some status registers (Read only):
+***Status registers (Read only):
 1.  Magnet strength (MD,ML,MH)
 2.  Automatic gain control (adusted automatically bring readings to useable levels) (AGC)
 
