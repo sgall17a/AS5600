@@ -1,0 +1,79 @@
+from struct import pack
+from machine import I2C
+
+
+class Tdesc:
+    def init(readwrite,register,firstbit,lastbit):
+        self.rw = readwrite
+        self.reg = register
+        self.mask = 0xff >> (lastbit-firstbit)
+        self.shift = firstbit
+        #if lastbit is > 7 then we need to read two bytes
+        if lastbit > 7:
+            self.buff =  bytes(2)
+            self.packstr = ">H"
+        else:
+            self.buff = bytes(1)
+            self.packstr = ">B"
+
+
+        
+    def __get___(self,obj,clss):    
+        obj.i2c.readfrom_mem(obj.i2cCode,self.reg,self.buff)                               
+        rawvalue = pack(self.packstr,self.buff)
+        return (rawvalue>>self.shift) & self.mask
+        
+    
+    def __set__(self,obj,clss,value):
+        if not self.readwrite:
+            raise "Read only attribute"
+        rawvalue = self.__get__(obj,clss) # get original value
+        makehole = rawvalue & ~(self.mask << self.shift)
+        addvalue = (makehole| ((self.mask() & value) << self.shift))       
+        obj.i2c(self.i2cCode,self.reg,buff)
+    
+        
+
+class TAS5600:
+    def __init__(self,i2c,i2cCode):
+        self.i2c = i2c
+        self.i2cCode = i2cCode
+        
+    ZMCO      = Tdesc(R,0x0,0,1 )
+    ZPOS      = Tdesc(W,0x1,0,11)
+    MPOS      = Tdesc(W,0x3,0,11)
+    MANG      = Tdesc(W,0x5,0,12)
+    RAWANGLE  = Tdesc(W,0xC,0,13)
+    ANGLE     = Tdesc(R,0xE,0,11)
+    
+    STATUS     = Tdesc(R,0xB,3,6)   # Bitfields.  Broken out below
+    ML        = Tdesc(R,0xB,3,6)
+    MD        = Tdesc(R,0xB,3,6)
+    MH        = Tdesc(R,0xB,3,6)    
+    AGC       = Tdesc(R,0x1A,0,7)
+    MAGNITUDE = Tdesc(R,0x1B,0,11)
+    #burn      = Tdesc(W,0xFF,0,11)
+    
+    CONF      = Tdesc(W,0x7,0,13)  # Bitfields.  Broken out below
+    WD        = Tdesc(W,0x07,5,6)
+    FTH       = Tdesc(W,0x07,0,1)
+    SF        = Tdesc(W,0x07,5,5)
+    PWMF      = Tdesc(W,0x08,6,7)
+    OUTS      = Tdesc(W,0x08,5,6)
+    HYST      = Tdesc(W,0x08,2,4)
+    PM        = Tdesc(W,0x08,0,1)
+    __BURN    = Tdesc(W,0xff,0,)
+    
+    
+    def burn_angle():
+        if not self.MD:
+            raise 'Can only write angle if magnet detected'
+        self.__BURN = 0x4
+        
+    def burn_angle():
+        if self.ZMCO:
+            raise 'Error. Angle already written'
+        self.__BURN = 0x8
+
+
+
