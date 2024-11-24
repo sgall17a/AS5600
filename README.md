@@ -1,5 +1,7 @@
 # Micropython library for AS5600
 
+# PLEASE NOTE - There has been a rewrite.  See comments below.  The old file is in old_as5600.py
+
 The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by the Hall effect.  The resolution is 12 bits thus it can divide a complete rotation into 2^12 or 4096 parts. The device is configured and read by I2C.  This library can read all registers on the AS5600 and can write to the writable registers.  (This is a complete rewrite of the library which uses only common micropython features and avoids things like Descriptors used in previous version)
 
 The device is  cofigured and read through I2C but can also be used in a standalone mode in 
@@ -51,10 +53,18 @@ If the method is called with a parameter then the register is set to the value o
 If you try to write to a non-writeable register an error will be thrown
 
 
-AS5600 rewrite.
+# AS5600 rewrite. 
 
-I have rewritten the AS5600p.py.   
+I have rewritten the AS5600p.py.  This is a work in progress because I am learning (slowly) to use Github! 
 Register attributes should work the same.  The internal mechanism has changes. 
+The scan() utility has been dropped. Just call scan on the I2C object
+Burn angle and burn setting have changed a bit.  
+NOTE-I have never actually used these because I dont want to brick my device for programming.
+
+Notes on internal changes.
+Descriptor classes are supported by Micropython.  I think these are more neater and more conventional.  I whas just learing
+about descriptors when I wrote the first version.
+
 
 
 
