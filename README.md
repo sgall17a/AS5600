@@ -10,8 +10,8 @@ which the angle is converted either to a voltage between 0 and 3.3V or to a PWM 
 ## Overview.
 Notes:  
     1. Relevant register names in brackets.  
-    2. The registers can READ/WRITE (congiguration), READONLY(status and readout) or WRITE ONLY (BURN). 
-    3. This is a brief overview and the datasheet will need to be consulted for forfurther information).
+    2. The registers can be READ/WRITE (for configuration), READONLY(status and readout) or WRITE ONLY (for BURN). 
+    3. This is a brief overview and the datasheet will need to be consulted for for further information.
 
 ### Configuration registers (READ/WRITE)   
 1.  Setting a minimum and maximum angle. (ZPOS,MPOS,MANG)
