@@ -73,7 +73,7 @@ class AS5600:
     #BURN_ANGLE        = Tdesc(W,0xFF,5,5)
     #BURN_SETTING      = Tdesc(W,0xFF,6,6)
      
-    def burn_angle():
+    def burn_setting():
         
         if not self.MD:
             raise 'Can only write angle if magnet detected'
