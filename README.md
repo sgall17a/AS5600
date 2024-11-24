@@ -57,13 +57,42 @@ If you try to write to a non-writeable register an error will be thrown
 
 I have rewritten the AS5600p.py.  This is a work in progress because I am learning (slowly) to use Github! 
 Register attributes should work the same.  The internal mechanism has changes. 
-The scan() utility has been dropped. Just call scan on the I2C object
-Burn angle and burn setting have changed a bit.  
-NOTE-I have never actually used these because I dont want to brick my device for programming.
 
-Notes on internal changes.
+The scan() utility has been dropped. Just call scan on the I2C object
+
+The method magnet_status has been dropped.  Just use the magnet status attributes.
+
+Burn angle and burn setting have changed a bit.  I did not want to put these as normal attributes to
+limit the likelihood of being used inadvertently.
+
+NOTE-I have never actually used BURN  because I dont want to brick my device for programming.
+
+## Notes on internal changes.
 Descriptor classes are supported by Micropython.  I think these are more neater and more conventional.  I whas just learing
 about descriptors when I wrote the first version.
+
+I dropped the namedtuple.  I think does not actually provide any benefit in conciseness or readability.
+
+I dropped register cacheing.  This was done mainly to limit bitfield extraction from CONF but considering this will only a few times 
+(at most) it is not the worth the effort or complication.
+
+### Testing.
+I have run a few tests.  These consist of testing reading and writing attributes  with a range of values which seems to work.
+Interestingly writing to a register seems to persist through a power cycle (as it should).
+Reading values by moving a magnet around and reading from angle and rawangle gives plausible values but I have not made a rig to test the accuracy of results.  Angle results are reasonable.  Rawangle seems too unstable at least in this setup to be useable.
+
+### Checking against datasheet.
+This is a moderately complex device with both magnetics and electronics.  This library is not sufficient for use of the device and the datasheet should be kept for reference.
+
+The name of the attrtiutes are capitalised versions of the register names in the data sheet.  
+
+I have added a field to the data descitor classes (R or W) to indicate read and write registers.
+
+There is a chart in the datasheet showing the registers and their bitfields.  My library is derived from this chart.
+The smaller bit address and the larger bit address for each bitfield is passed to the descriptor.  The descriptor either reads the bitfields or sets the bitfields and writes the whole adjusted register back to the device.
+
+
+
 
 
 
