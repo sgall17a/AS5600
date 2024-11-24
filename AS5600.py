@@ -1,10 +1,21 @@
 from struct import pack,unpack
 from micropython import const
 
-
 R =True
 W=False
-   
+
+#Initiallising the device requires an i2c object from the machine module (hard or soft).  
+
+#The i2c address defaults to 54 but can be changed.
+# eg Z = AS5600(i2c) or   Z= AS5600(i2c,35)
+
+#Device registers can be read or set as attributes.
+# eg  Z.ZPOS = 167  or print(Z.ZPOS)
+
+# Burn angle and burn setting are NOT provided as attributes (to reduce risk of inadvertent use)
+# The device can only be BURNT a limite number of times.
+
+#This is an internal descriptor class.  DO NOT USE.  It has to come first because it is referenced by AS5600 later.
 class Tdesc:
     def __init__(self,readonly,register,firstbit,lastbit):
 
@@ -46,7 +57,7 @@ class AS5600:
     def __init__(self,i2c,code=54):        
         self.I2C       = i2c
         self.i2cCode   = code
-    #M12 = (2<<12)-1  #mask for angle
+
     ZMCO      = Tdesc(R,0x0,0,1 )  #shift 0  mask = 3
     ZPOS      = Tdesc(W,0x1,0,11)  
     MPOS      = Tdesc(W,0x3,0,11)
