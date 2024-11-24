@@ -73,22 +73,27 @@ about descriptors when I wrote the first version.
 
 I dropped the namedtuple.  I think does not actually provide any benefit in conciseness or readability.
 
+Various other simplifications.
+
 I dropped register cacheing.  This was done mainly to limit bitfield extraction from CONF but considering this will only a few times 
 (at most) it is not the worth the effort or complication.
 
 ### Testing.
 I have run a few tests.  These consist of testing reading and writing attributes  with a range of values which seems to work.
 Interestingly writing to a register seems to persist through a power cycle (as it should).
-Reading values by moving a magnet around and reading from angle and rawangle gives plausible values but I have not made a rig to test the accuracy of results.  Angle results are reasonable.  Rawangle seems too unstable at least in this setup to be useable.
+
+Reading values by moving a magnet around and reading from angle and rawangle gives plausible values but I have not made a rig to test the accuracy of results.  Angle results are reasonable.  Rawangle seems too unstable, at least in this setup, to be useable.
 
 ### Checking against datasheet.
-This is a moderately complex device with both magnetics and electronics.  This library is not sufficient for use of the device and the datasheet should be kept for reference.
+This is a moderately complex device with both magnetics and electronics.  
+This library is not sufficient for documentation of the device and the datasheet should be kept for reference.
 
-The name of the attrtiutes are capitalised versions of the register names in the data sheet.  
+The name of the attributes are capitalised versions of the register names in the data sheet.  
 
-I have added a field to the data descitor classes (R or W) to indicate read and write registers.
+I have added a field to the data descriptor classes (R or W) to indicate read and write registers.
 
 There is a chart in the datasheet showing the registers and their bitfields.  My library is derived from this chart.
+
 The smaller bit address and the larger bit address for each bitfield is passed to the descriptor.  The descriptor either reads the bitfields or sets the bitfields and writes the whole adjusted register back to the device.
 
 
