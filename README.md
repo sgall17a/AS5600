@@ -51,6 +51,13 @@ If the method is called with a parameter then the register is set to the value o
 If you try to write to a non-writeable register an error will be thrown
 
 
+AS5600 rewrite.
+
+I have rewritten the AS5600p.py.   
+Register attributes should work the same.  The internal mechanism has changes. 
+
+
+
 ### Example.
 
 
