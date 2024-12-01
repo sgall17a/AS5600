@@ -107,11 +107,12 @@ The smaller bit address and the larger bit address for each bitfield is passed t
 
 ``` python
 from as5600 import AS5600
+#THIS HAS BEEN CHANGED TO CURRENT USAGE
 z = AS5600(i2c)
-#Read the ZPOS register:  
-value = z.zpos(). #This will return the register value
-#Write to the ZPOS register  
-k = z.pos(value).  #This will return the value supplied, after writing it to the register
+#Read the ZPOS register:
+value = z.ZPOS
+#Write to the ZPOS register
+z.ZPOS = value
 ```
 
 # All register methods
@@ -134,27 +135,28 @@ def mang(self,*args)
 
 
 ``` python
-def pm(self,*args)
+z = AS5600(I2C)
+z.PM
     """Power Mode.  There are 4 modes to reduce device current at the expense of increasing polling time
     00 = NOM, 
     01 = LPM1 
     10 = LPM2 
     11 = LPM3"""
     
-def hyst(sel,*args)
+z.HYST
     """Hysteresis.  Set 4 hysteresis modes to reduce output jitter
     00 = OFF,
     01 = 1 LSB, 
     10 = 2 LSBs, 
     11 = 3 LSBs"""
     
-def z.outs(self,*args)
+z.OUTS
     """Output stage PWM or analog
     00 = analog (full range from 0% to 100% between GND and VDD,
     01 = analog (reduced range from 10% to 90% between GND and VDD, 
     10 = digital PWM"""
 
-def pwmf(self,*args)
+z.PMWF
 
     """PWM frequency   
     00 = 115 Hz; 
@@ -162,14 +164,14 @@ def pwmf(self,*args)
     10 = 460 Hz; 
     11 = 920 Hz"""
 
-def sf(self,*args )
+z.SF 
     """Slow filter to reduce jitter or noise.
      00 = 16x (1); 
      01 = 8x; 
      10 = 4x; 
      11 = 2x"""
 
-def fth(self,*args)
+z.FTH
     """Fast filter to reduce jitter or noise
     000 = slow filter only, 
     001 = 6 LSBs, 
@@ -180,7 +182,7 @@ def fth(self,*args)
     110 = 24 LSBs, 
     111 = 10 LSBs"""
 
-def wd(self,*args)
+z.WD
    """ Watchdog.  Drop into LPM3 after about 1 minute of inactivity
     0 = OFF, 
     1 = ON   """      
@@ -190,16 +192,16 @@ def wd(self,*args)
 
 ```python
 
-def md(self)
+z.MD
     #Magnet detected
 
-def ml(self)
+z.ML
     #Magnet too weak
     
-def mh(self)   
+z.MH   
     # Magnet too strong
     
-def agc(self)
+z.AGC
     #Automatic Gain control (0-255)
     
 ```
@@ -207,10 +209,10 @@ def agc(self)
 ## Actual angles read only
 
 ``` python
-def rawangle(self)
+z.RAWANGLE
     #Raw angle
     
-def angle(self)
+z.ANGLE
     #Angle - same as rawangle() but filters and hysteresis applied
 ```
 
