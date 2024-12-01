@@ -21,7 +21,9 @@ class Tdesc:
 
         self.readonly = readonly
         self.reg = register
+        #Mask eg 0b00000111 Some least sig bits to mask offf the value
         self.mask = (2<<(lastbit-firstbit))-1
+        #Punch - Move the mask to the right position then invert it so we can "punch" a hole for a new value
         self.punch = (self.mask << firstbit) ^ 0xffff
         if lastbit > 7:
             self.buff = bytearray(2)
@@ -46,8 +48,11 @@ class Tdesc:
         obj.I2C.readfrom_mem_into(obj.i2cCode,self.reg,self.buff )
         
         old = unpack(self.packstr,self.buff)[0]
+        #Shift the value to the right position and make sure it is not too big.
         vshift = (value & self.mask)  << self.shift
+        #Punch a hole in the old value and OR the bits of the new value into place
         newvalue =  (old  & self.punch) | vshift
+        #This is an integer so convert it back to a buffer
         mybuff = pack(self.packstr,newvalue)
 
         obj.I2C.writeto_mem(obj.i2cCode,self.reg,mybuff)
