@@ -7,6 +7,9 @@ The AS5600 is an angle sensor, based on detecting  the rotation of a magnet by t
 The device is  configured and read through I2C but can also be used in a standalone mode in 
 which the angle is converted either to a voltage between 0 and 3.3V or to a PWM output.  
 
+#PLEASE NOTE:  I re-tested this file and got gibberish.  I think I made the buffer conversion litte-endian instead of big-endian ("<H" instead of ">H")
+I will get round to testing and fixing this.
+
 ## Overview.
 Notes:  
     1. Relevant register names in brackets.  
